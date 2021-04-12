@@ -42,6 +42,8 @@ import org.springframework.lang.Nullable;
  * @author Sam Brannen
  * @since 03.11.2003
  */
+// 提供的方法都是对 ApplicationContext 进行配置,提供了生命周期的管理功能
+// 	Lifecycle：对 context 生命周期的管理
 public interface ConfigurableApplicationContext extends ApplicationContext, Lifecycle, Closeable {
 
 	/**
