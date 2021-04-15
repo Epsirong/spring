@@ -125,6 +125,8 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
 		// 负责解析BeanDefinition
+		// 模拟委托堆栈
+		// 记录老的 BeanDefinitionParserDelegate 对象(为了传播和保留，root的default配置)
 		BeanDefinitionParserDelegate parent = this.delegate;
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
@@ -146,6 +148,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 
 		preProcessXml(root);
+		// 解析
 		parseBeanDefinitions(root, this.delegate);
 		postProcessXml(root);
 

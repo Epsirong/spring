@@ -525,8 +525,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return this.applicationListeners;
 	}
 
-	@Override
 	// 刷新 Spring 的应用上下文
+	@Override
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
 			//5.3+新增，用于启动度量标准，手动埋点（收集指标，启动链路追踪）
@@ -542,7 +542,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			// Prepare the bean factory for use in this context.
 			// 3. 填充BeanFactory功能
-			// 上面获取的 BeanFactory 除了加载了一些 BeanDefinition 就没有其他任何东西了，这个时候其实还不能投入生产
+			// 上面获取的 BeanFactory 除了加载了一些 BeanDefinition 就没有其他任何东西，这个时候其实还不能投入生产
 			// 还确实ClassLoader和后置处理器等
 			prepareBeanFactory(beanFactory);
 

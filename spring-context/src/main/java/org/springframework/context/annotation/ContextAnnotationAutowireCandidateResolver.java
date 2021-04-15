@@ -16,15 +16,6 @@
 
 package org.springframework.context.annotation;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -36,6 +27,15 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Complete implementation of the
@@ -51,6 +51,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 	@Override
 	@Nullable
 	public Object getLazyResolutionProxyIfNecessary(DependencyDescriptor descriptor, @Nullable String beanName) {
+		// 对依赖生成代理对象
 		return (isLazy(descriptor) ? buildLazyResolutionProxy(descriptor, beanName) : null);
 	}
 
@@ -80,6 +81,8 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 				"BeanFactory needs to be a DefaultListableBeanFactory");
 		final DefaultListableBeanFactory dlbf = (DefaultListableBeanFactory) beanFactory;
 
+		// 目标源，被代理对象的抽象（AOP重要类）
+		// 当需要调用真实对象的方法时，通过TargetSource去拿到真实的对象
 		TargetSource ts = new TargetSource() {
 			@Override
 			public Class<?> getTargetClass() {
@@ -92,6 +95,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 			@Override
 			public Object getTarget() {
 				Set<String> autowiredBeanNames = (beanName != null ? new LinkedHashSet<>(1) : null);
+				// 通过beanFactory去真正解析依赖(Bar)，将Spring IoC里真实的Bar返回
 				Object target = dlbf.doResolveDependency(descriptor, beanName, autowiredBeanNames, null);
 				if (target == null) {
 					Class<?> type = getTargetClass();
