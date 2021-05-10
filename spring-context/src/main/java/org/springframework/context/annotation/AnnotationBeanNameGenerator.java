@@ -164,9 +164,12 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 	 * @return the default bean name (never {@code null})
 	 */
 	protected String buildDefaultBeanName(BeanDefinition definition) {
+		// 获取一个简短的 ClassName
 		String beanClassName = definition.getBeanClassName();
 		Assert.state(beanClassName != null, "No bean class name set");
 		String shortClassName = ClassUtils.getShortName(beanClassName);
+		// 调用 Introspector#decapitalize 方法，设置首字母大写或小写
+		// 如果一个类名是以两个大写字母开头的，则首字母不变，其它情况下默认首字母变成小写。
 		return Introspector.decapitalize(shortClassName);
 	}
 

@@ -76,18 +76,22 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 
 	@Nullable
 	protected <T> T getProperty(String key, Class<T> targetValueType, boolean resolveNestedPlaceholders) {
+		// MutablePropertySourcesl实现类
 		if (this.propertySources != null) {
+			// 其实是有顺序的（查找的源是存在 CopyOnWriteArrayList 中，在启动时就被有序固定下来）
 			for (PropertySource<?> propertySource : this.propertySources) {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Searching for key '" + key + "' in PropertySource '" +
 							propertySource.getName() + "'");
 				}
+				// 一般列表里为8个，本地配置倒数第二位置
 				Object value = propertySource.getProperty(key);
 				if (value != null) {
 					if (resolveNestedPlaceholders && value instanceof String) {
 						value = resolveNestedPlaceholders((String) value);
 					}
 					logKeyFound(key, propertySource, value);
+					//查到value即退出
 					return convertValueIfNecessary(value, targetValueType);
 				}
 			}
