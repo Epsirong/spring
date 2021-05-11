@@ -284,6 +284,7 @@ class ConstructorResolver {
 		}
 
 		Assert.state(argsToUse != null, "Unresolved constructor arguments");
+		// 创建实例，argsToUse的获取
 		bw.setBeanInstance(instantiate(beanName, mbd, constructorToUse, argsToUse));
 		return bw;
 	}
@@ -780,6 +781,7 @@ class ConstructorResolver {
 				}
 				try {
 					// 寻找参数bean的核心
+					// 从BeanFactory中获取Bean
 					Object autowiredArgument = resolveAutowiredArgument(
 							methodParam, beanName, autowiredBeanNames, converter, fallback);
 					args.rawArguments[paramIndex] = autowiredArgument;

@@ -577,7 +577,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}
 			// 此时对象已被生产，还未初始化（根据对象引用能定位到堆中的对象），封装半成品的bean的地方。
 			// Spring提前将对象曝光，给大家认识使用
-			// 解决循环依赖的关键
+			// 解决循环依赖的关键（为何需要第三级缓存的原因：存储函数接口，该BeanPostProcess在曝光，且被提前引用的时候才调用AOP）
 			addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
 		}
 
