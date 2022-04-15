@@ -468,6 +468,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see org.springframework.core.io.support.PathMatchingResourcePatternResolver
 	 */
 	protected ResourcePatternResolver getResourcePatternResolver() {
+		// this贡献自身
 		return new PathMatchingResourcePatternResolver(this);
 	}
 
