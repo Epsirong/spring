@@ -55,9 +55,7 @@ final class PostProcessorRegistrationDelegate {
 	}
 
 
-	// 对所有的 BeanDefinitionRegistryPostProcessors
-	// 、手动注册的 BeanFactoryPostProcessor
-	// 、通过配置文件方式的 BeanFactoryPostProcessor
+	// 对所有的 BeanDefinitionRegistryPostProcessors、手动注册的 BeanFactoryPostProcessor、通过配置文件方式的 BeanFactoryPostProcessor
 	// 按照 PriorityOrdered 、 Ordered、no ordered 三种方式分开处理、调用。
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {

@@ -539,17 +539,18 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			// Tell the subclass to refresh the internal bean factory.
 			// 2 创建并初始化 BeanFactory
+			// 解析xml，放入BeanDefinitionMap和BeanDefinitionNames
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
 			// 3. 填充BeanFactory功能
 			// 上面获取的 BeanFactory 除了加载了一些 BeanDefinition 就没有其他任何东西，这个时候其实还不能投入生产
-			// 还确实ClassLoader和后置处理器等
+			// 还确定ClassLoader和后置处理器等
 			prepareBeanFactory(beanFactory);
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
-				// 4.子类处理自定义BeanFactoryPostProcess
+				// 4.MVC, 子类处理自定义BeanFactoryPostProcess（扩展点）
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
@@ -579,7 +580,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
-				// 11. 初始化剩下的单例Bean(非延迟加载的)
+				// 11. 初始化剩下的单例Bean(非延迟加载的) iMportant
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
@@ -634,15 +635,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
-		// 扩展点（初始化占位符属性来源）
+		// 扩展点（初始化占位符属性来源）,SpringMVC中实现
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
 		getEnvironment().validateRequiredProperties();
 
+		// 注册监听器
 		// Store pre-refresh ApplicationListeners...
 		if (this.earlyApplicationListeners == null) {
+			// this.applicationListeners，SpringBoot中才有值
 			this.earlyApplicationListeners = new LinkedHashSet<>(this.applicationListeners);
 		}
 		else {
@@ -696,6 +699,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		//  添加ApplicationContextAwareProcessor
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		// 设置忽略自动装配的接口
+		// 此处初始化不执行aware，而将aware的执行，放置在生命周期内
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
 		beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);

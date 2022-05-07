@@ -133,6 +133,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			// 定制BeanFactory设置相关属性
 			customizeBeanFactory(beanFactory);
 			// 加载BeanDefinition
+			// 极复杂流程
 			loadBeanDefinitions(beanFactory);
 			// 设置Context的BeanFactory
 			this.beanFactory = beanFactory;
@@ -202,6 +203,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 */
 	protected DefaultListableBeanFactory createBeanFactory() {
 		//？parent的BeanFactory，用于给BeanFactory继承，初始化通用配置
+		// SpringMVC才引入父子
 		return new DefaultListableBeanFactory(getInternalParentBeanFactory());
 	}
 
@@ -220,9 +222,11 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 	 * @see DefaultListableBeanFactory#setAllowEagerClassLoading
 	 */
 	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
+		//look-up/replace-method
 		if (this.allowBeanDefinitionOverriding != null) {
 			beanFactory.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
 		}
+		// 与循环依赖有关配置
 		if (this.allowCircularReferences != null) {
 			beanFactory.setAllowCircularReferences(this.allowCircularReferences);
 		}
